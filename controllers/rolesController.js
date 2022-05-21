@@ -2,19 +2,27 @@
 // const res = require("express/lib/response");
 var models = require("../models");
 
-exports.index = (req, res) => {
+exports.index = async (req, res) => {
+  // const id = req.params.id;
   var response = {
     success: false,
     message: [],
     data: {},
   };
-  models.Roles.findAll({}).then((found) => {
-    if (found) {
-      response.message.push("role found");
-      response.success = true;
-    }
-    res.send(response);
+  const role = await models.Roles.findAll({
+    include: [
+      models.Permissions,
+      models.Instructors,
+      models.Admins,
+      models.Students,
+    ],
   });
+  if (role) {
+    response.message.push("role found");
+    response.success = true;
+    response.data = role;
+  }
+  res.send(response);
 };
 
 exports.store = (req, res) => {

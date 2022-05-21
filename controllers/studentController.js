@@ -8,10 +8,13 @@ exports.index = (req, res) => {
     message: [],
     data: {},
   };
-  models.Permissions.findAll({}).then((found) => {
+  models.Students.findAll({
+    include: [models.Session_tests],
+  }).then((found) => {
     if (found) {
-      response.message.push("permission found");
+      response.message.push("students found");
       response.success = true;
+      response.data = found;
     }
     res.send(response);
   });
@@ -23,13 +26,14 @@ exports.store = (req, res) => {
     message: [],
     data: {},
   };
-  models.Permissions.create({
-    role_id: req.body.id,
-    permissionName: req.body.name,
-    isActive: req.body.isActive,
+  models.Students.create({
+    studentName: req.body.instructorName,
+    email: req.body.email,
+    password: req.body.password,
+    role_id: req.body.role_id,
   }).then((created) => {
     if (created) {
-      response.message.push("new permission created");
+      response.message.push("new student created");
       response.success = true;
       response.data = created;
     }

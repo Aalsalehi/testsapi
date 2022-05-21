@@ -11,6 +11,15 @@ module.exports = (sequelize, DataTypes) => {
       Roles.hasMany(models.Permissions, {
         foreignKey: "role_id",
       });
+      Roles.hasMany(models.Admins, {
+        foreignKey: "role_id",
+      });
+      Roles.hasMany(models.Students, {
+        foreignKey: "role_id",
+      });
+      Roles.hasMany(models.Instructors, {
+        foreignKey: "role_id",
+      });
     }
   }
   Roles.init(

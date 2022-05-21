@@ -1,5 +1,3 @@
-// const req = require("express/lib/request");
-// const res = require("express/lib/response");
 var models = require("../models");
 
 exports.index = (req, res) => {
@@ -8,10 +6,13 @@ exports.index = (req, res) => {
     message: [],
     data: {},
   };
-  models.Permissions.findAll({}).then((found) => {
+  models.Questions.findAll({
+    include: [models.Answers_options],
+  }).then((found) => {
     if (found) {
-      response.message.push("permission found");
+      response.message.push("question found");
       response.success = true;
+      response.data = found;
     }
     res.send(response);
   });
@@ -23,13 +24,12 @@ exports.store = (req, res) => {
     message: [],
     data: {},
   };
-  models.Permissions.create({
-    role_id: req.body.id,
-    permissionName: req.body.name,
-    isActive: req.body.isActive,
+  models.Questions.create({
+    question: req.body.question,
+    test_id: req.body.test_id,
   }).then((created) => {
     if (created) {
-      response.message.push("new permission created");
+      response.message.push("new question created");
       response.success = true;
       response.data = created;
     }
